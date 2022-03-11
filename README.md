@@ -11,7 +11,7 @@
 
 ########### getIAMUsersAccessListOlderThan.py ################
 
-Python Script for Getting AWS IAM Users Access Keys List Older than ThresholdInDays provided.
+**Python Script** for Getting AWS IAM Users Access Keys List Older than ThresholdInDays provided.
 
 ![image](https://user-images.githubusercontent.com/52037731/157807661-e39ee2ed-d6df-4723-bd89-296cb6c8ad24.png)
 
