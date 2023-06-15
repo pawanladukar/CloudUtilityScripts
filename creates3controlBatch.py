@@ -8,7 +8,7 @@ session = boto3.Session(
 )
 
 # Create an S3 Batch client
-s3batch_client = session.client('s3control')
+s3batch_client = session.client('s3control', region_name='YOUR_REGION')
 
 # Define the parameters for the batch job
 account_id = 'YOUR_AWS_ACCOUNT_ID'
@@ -39,16 +39,15 @@ response = s3batch_client.create_job(
     RoleArn=existing_job_role_arn,
     Manifest={
         'Spec': {
-            'Location': {
-                'S3Location': {
-                    'BucketArn': f'arn:aws:s3:::{bucket_name}'
-                }
-            },
             'Format': 'S3BatchOperations_CSV_20180820',
             'Fields': ['Bucket', 'Key']
+        },
+        'Location': {
+            'S3Location': {
+                'BucketArn': f'arn:aws:s3:::{bucket_name}'
+            }
         }
-    },
-    JobId=job_name
+    }
 )
 
 # Print the response from the create_job API
