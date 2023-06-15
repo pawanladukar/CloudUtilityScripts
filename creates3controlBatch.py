@@ -13,9 +13,10 @@ s3batch_client = session.client('s3control')
 # Define the parameters for the batch job
 account_id = 'YOUR_AWS_ACCOUNT_ID'
 job_name = 'YOUR_JOB_NAME'
-manifest_location = 's3://YOUR_BUCKET_NAME/YOUR_MANIFEST_FILE.manifest'
+bucket_name = 'YOUR_BUCKET_NAME'
+report_prefix = 'YOUR_REPORT_PREFIX/'
 existing_job_role_arn = 'arn:aws:iam::YOUR_AWS_ACCOUNT_ID:role/YOUR_EXISTING_ROLE'
-existing_report_arn = 'arn:aws:s3:::YOUR_BUCKET_NAME/YOUR_REPORT_PREFIX/'
+existing_report_arn = f'arn:aws:s3:::{bucket_name}/{report_prefix}'
 
 # Create the S3 Batch job
 response = s3batch_client.create_job(
@@ -29,8 +30,8 @@ response = s3batch_client.create_job(
     },
     Priority=1,
     Report={
-        'Bucket': 'YOUR_BUCKET_NAME',
-        'Prefix': 'YOUR_REPORT_PREFIX/',
+        'Bucket': bucket_name,
+        'Prefix': report_prefix,
         'Format': 'Report_CSV_20180820',
         'Enabled': True,
         'ReportScope': 'AllTasks'
@@ -38,11 +39,13 @@ response = s3batch_client.create_job(
     RoleArn=existing_job_role_arn,
     Manifest={
         'Spec': {
+            'Location': {
+                'S3Location': {
+                    'BucketArn': f'arn:aws:s3:::{bucket_name}'
+                }
+            },
             'Format': 'S3BatchOperations_CSV_20180820',
             'Fields': ['Bucket', 'Key']
-        },
-        'Location': {
-            'ObjectArn': manifest_location
         }
     },
     JobId=job_name
